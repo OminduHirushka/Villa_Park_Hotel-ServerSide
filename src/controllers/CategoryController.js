@@ -28,6 +28,39 @@ export function createCategory(req, res) {
     });
 }
 
+export function updateCategory(req, res) {
+  if (!isAdminValid(req)) {
+    res.status(403).json({
+      message: "Not Authorized",
+    });
+    return;
+  }
+
+  const categoryName = req.params.name;
+  const updatedCategory = req.body;
+
+  Category.findOneAndUpdate({ name: categoryName }, updatedCategory)
+    .then((result) => {
+      if (!result) {
+        res.status(404).json({
+          message: "Category not found",
+          name: categoryName,
+        });
+      } else {
+        res.status(201).json({
+          message: "Successfull",
+          result: updatedCategory,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Failed",
+        error: err,
+      });
+    });
+}
+
 export function getCategory(req, res) {
   Category.find()
     .then((result) => {
