@@ -1,16 +1,8 @@
 import Category from "../models/Category.js";
+import { isAdminValid } from "./UserController.js";
 
 export function createCategory(req, res) {
-  const user = req.user;
-
-  if (user == null) {
-    res.status(403).json({
-      message: "Please login to create a category",
-    });
-    return;
-  }
-
-  if (user.type != "admin") {
+  if (!isAdminValid(req)) {
     res.status(403).json({
       message: "Not Authorized",
     });
@@ -78,16 +70,7 @@ export function getCategoryByName(req, res) {
 }
 
 export function deleteCategory(req, res) {
-  const user = req.user;
-
-  if (user == null) {
-    res.status(403).json({
-      message: "Please login to delete a category",
-    });
-    return;
-  }
-
-  if (user.type != "admin") {
+  if (!isAdminValid(req)) {
     res.status(403).json({
       message: "Not Authorized",
     });
