@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import galleryRouter from "./src/routes/GlleryItemeRoutes.js";
 import categoryRouter from "./src/routes/CategoryRoutes.js";
 import roomRouter from "./src/routes/RoomRoutes.js";
+import bookingRouter from "./src/routes/BookingRoutes.js";
 
 dotenv.config();
 
@@ -44,7 +45,8 @@ mongoose
 app.use("/api/users", userRouter);
 app.use("/api/gallery", galleryRouter);
 app.use("/api/category", categoryRouter);
-app.use("/api/room", roomRouter)
+app.use("/api/room", roomRouter);
+app.use("/api/booking", bookingRouter);
 
 app.listen(5000, (req, res) => {
   console.log("Server is running on port 5000");
