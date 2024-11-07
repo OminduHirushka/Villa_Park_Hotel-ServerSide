@@ -8,10 +8,14 @@ import galleryRouter from "./src/routes/GlleryItemeRoutes.js";
 import categoryRouter from "./src/routes/CategoryRoutes.js";
 import roomRouter from "./src/routes/RoomRoutes.js";
 import bookingRouter from "./src/routes/BookingRoutes.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
+
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
