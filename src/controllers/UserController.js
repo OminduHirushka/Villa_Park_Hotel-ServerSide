@@ -93,16 +93,75 @@ export function isCustomerValid(req) {
 }
 
 export function getUser(req, res) {
-  const user = req.body.user;
+  User.find().then((list) => {
+    res.json({
+      message: "Successfull",
+      list: list,
+    });
+  });
+}
 
-  if (user == null) {
-    res.json({
-      message: "User Not Found",
+export function updateUser(req, res) {
+  if (!isCustomerValid(req)) {
+    res.status(403).json({
+      message: "Not Authorized",
     });
-  } else {
-    res.json({
-      message: "User Found",
-      user: user,
-    });
+    return;
   }
+
+  const userEmail = req.params.email;
+  const updatedUser = req.body;
+
+  User.findOneAndUpdate({ email: userEmail }, updatedUser)
+    .then((result) => {
+      if (!result) {
+        res.status(404).json({
+          message: "User not found",
+          email: userEmail,
+        });
+      } else {
+        res.status(201).json({
+          message: "User updated successfully",
+          result: updatedUser,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Failed",
+        error: err,
+      });
+    });
+}
+
+export function deleteUser(req, res) {
+  if (!isAdminValid(req)) {
+    res.status(403).json({
+      message: "Not Authorized",
+    });
+    return;
+  }
+
+  const userEmail = req.params.email;
+
+  User.findOneAndDelete({ email: userEmail })
+    .then((result) => {
+      if (!result) {
+        res.status(404).json({
+          message: "User not found",
+          email: userEmail,
+        });
+      } else {
+        res.status(201).json({
+          message: "User deleted successfully",
+          email: userEmail,
+        });
+      }
+    })
+    .catch((err) => {
+      res.json({
+        message: "User deletion failed",
+        error: err,
+      });
+    });
 }
